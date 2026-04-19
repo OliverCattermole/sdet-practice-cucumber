@@ -1,4 +1,5 @@
-SauceDemo Playwright-Cucumber Framework
+**SauceDemo Playwright-Cucumber Framework**
+
 This is a functional test automation framework built to demonstrate modern QA practices using Playwright, Cucumber (BDD), and TypeScript.
 
 **Why this exists**
