@@ -25,7 +25,7 @@ stages:
     - script: npx playwright install chromium --with-deps
       displayName: 'Install Playwright Browser'
 
-    - script: npx cucumber-js -f json:cucumber_report.json
+    - script: npx cucumber-js -f json:cucumber_report.json -f junit:junit-results.xml
       displayName: 'Run Cucumber Tests'
       continueOnError: true    # Generate the report even if tests fail
 
@@ -43,9 +43,6 @@ stages:
     - task: PublishPipelineArtifact@1
       condition: always()
       inputs:
-        targetPath: 'reports/' # Adjust this to wherever your report.js saves the HTML
+        targetPath: '$(System.DefaultWorkingDirectory)/cucumber_report.html' 
         artifact: 'Cucumber_HTML_Report'
       displayName: 'Upload Pretty Report'
-
-
-
