@@ -1,0 +1,51 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+stages:
+- stage: Test
+  jobs:
+  - job: RunCucumber
+    steps:
+    - task: NodeTool@0
+      inputs:
+        versionSpec: '20.x'
+      displayName: 'Install Node.js'
+
+    - script: npm install
+      displayName: 'Install Dependencies'
+
+    - script: npx playwright install chromium --with-deps
+      displayName: 'Install Playwright Browser'
+
+    - script: npx cucumber-js -f json:cucumber_report.json
+      displayName: 'Run Cucumber Tests'
+      continueOnError: true    # Generate the report even if tests fail
+
+    - script: node report.js
+      displayName: 'Generate HTML Report'
+      condition: always()
+
+    - task: PublishTestResults@2
+      condition: always()
+      inputs:
+        testResultsFormat: 'JUnit'
+        testResultsFiles: '**/junit-results.xml' 
+      displayName: 'Publish Results to Tests Tab'
+
+    - task: PublishPipelineArtifact@1
+      condition: always()
+      inputs:
+        targetPath: 'reports/' # Adjust this to wherever your report.js saves the HTML
+        artifact: 'Cucumber_HTML_Report'
+      displayName: 'Upload Pretty Report'
+
+
+
