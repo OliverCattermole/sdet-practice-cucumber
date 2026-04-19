@@ -15,4 +15,5 @@ Before(async function (this: CustomWorld) {
 After(async function (this : CustomWorld) {
     // If this.page exists, call .close(). If is is null or undefined, skip this line
     await this.page?.close();
+    await this.browser?.close();
 });
